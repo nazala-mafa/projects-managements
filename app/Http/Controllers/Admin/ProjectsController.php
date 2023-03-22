@@ -42,7 +42,7 @@ class ProjectsController extends Controller
         $success = $project->save();
 
         return response()->json([
-            'message' => $success ? 'Data saved successfully' : 'Data failed to save',
+            'message' => $success ? 'Project saved successfully' : 'Project failed to save',
             'success' => $success
         ], $success ? 201 : 400);
     }
@@ -71,7 +71,7 @@ class ProjectsController extends Controller
         $success = $project->save();
 
         return response()->json([
-            'message' => $success ? 'Data updated successfully' : 'Data failed to save',
+            'message' => $success ? 'Project updated successfully' : 'Project failed to update',
             'success' => $success
         ], $success ? 201 : 400);
     }
@@ -94,7 +94,7 @@ class ProjectsController extends Controller
         $success = $project->delete();
 
         return response()->json([
-            'message' => $success ? 'Data deleted successfully' : 'Data failed to delete',
+            'message' => $success ? 'Project deleted successfully' : 'Project failed to delete',
             'success' => $success
         ], $success ? 201 : 400);
     }

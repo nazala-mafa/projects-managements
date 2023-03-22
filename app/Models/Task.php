@@ -10,6 +10,7 @@ class Task extends Model
     use HasFactory;
 
     protected $fillable = [
+        'project_id',
         'name',
         'description',
         'deadline',
@@ -17,4 +18,9 @@ class Task extends Model
         'image'
     ];
     public $timestamps = false;
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_assign', 'id');
+    }
 }

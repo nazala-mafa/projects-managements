@@ -15,20 +15,22 @@
 
     <div class="card">
       <div class="card-header d-flex justify-content-between">
-        <h4 class="mb-0">Manage Projects</h4>
+        <h4 class="mb-0">Manage Tasks</h4>
         <div>
-          <button class="btn btn-primary btn-add">Add New Project</button>
+          <button class="btn btn-primary btn-add">Add New Task</button>
         </div>
       </div>
       <div class="card-body">
-        <table id="example" class="display" style="width:100%">
+        <table id="tasks-table" class="display" style="width:100%">
           <thead>
             <tr>
               <th>#</th>
+              <th>User Assign</th>
               <th>Name</th>
-              <th>Status</th>
-              <th>Image</th>
-              <th>Action</th>
+              <th>Description</th>
+              <th>Deadline</th>
+              <td>Image</td>
+              <td>Action</td>
             </tr>
           </thead>
         </table>
@@ -51,10 +53,19 @@
             <input class="form-control" type="text" name="name" id="name">
           </div>
           <div class="mb-3">
-            <label for="status" class="form-label">Status</label>
-            <select class="form-control" name="status" id="status">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" rows="4" class="form-control"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="deadline" class="form-label">Deadline</label>
+            <input type="date" name="deadline" id="deadline" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="user_assign" class="form-label">User Assign</label>
+            <select name="user_assign" id="user_assign" class="form-control">
+              @foreach ($users as $user)
+                <option value="{{ $user->id }}">{{ $user->name }}</option>
+              @endforeach
             </select>
           </div>
           <div class="mb-3">
