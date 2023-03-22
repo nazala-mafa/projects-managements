@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ProjectsController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,3 +23,4 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 // Admin
 Route::resource('users', UsersController::class)->names('users');
 Route::resource('projects', ProjectsController::class)->names('projects')->only(['index', 'store', 'update', 'destroy']);
+Route::resource('projects.tasks', ProjectsController::class)->names('tasks')->only(['index', 'store', 'update', 'destroy']);

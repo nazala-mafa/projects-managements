@@ -15,5 +15,10 @@ class Project extends Model
         'image'
     ];
 
+    function tasks()
+    {
+        return $this->hasMany(Task::class, 'project_id', 'id');
+    }
+
     public $timestamps = false;
 }

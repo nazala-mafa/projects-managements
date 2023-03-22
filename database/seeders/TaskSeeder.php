@@ -17,7 +17,7 @@ class TaskSeeder extends Seeder
     public function run()
     {
         Project::select('id')->get()->map(function ($item) {
-            Task::factory(5)->create([
+            Task::factory(2)->create([
                 'project_id' => $item->id
             ]);
         });

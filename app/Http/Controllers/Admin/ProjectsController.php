@@ -86,6 +86,11 @@ class ProjectsController extends Controller
     {
         $this->deleteImageByUrl($project->image);
 
+        $project->tasks()->get()->map(function ($task) {
+            $this->deleteImageByUrl($task->image);
+            $task->delete();
+        });
+
         $success = $project->delete();
 
         return response()->json([
