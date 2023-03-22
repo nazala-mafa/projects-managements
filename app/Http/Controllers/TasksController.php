@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
@@ -20,7 +19,13 @@ class TasksController extends Controller
     public function index(Project $project)
     {
         if (request()->ajax()) {
-            return DataTables::of(Task::select('*')->where('project_id', $project->id)->with('users')->get())
+            if (auth()->user()->role === 'admin') {
+                $source = Task::select('*')->where('project_id', $project->id)->with('users')->get();
+            } else {
+                $source = Task::select('*')->where('project_id', $project->id)->where('user_assign', auth()->user()->id)->with('users')->get();
+            }
+
+            return DataTables::of($source)
                 ->addColumn('user_assign_name', function ($task) {
                     return $task->users->name;
                 })
@@ -45,10 +50,10 @@ class TasksController extends Controller
 
         $task = new Task;
         $task->project_id = $project->id;
+        $task->user_assign = $request->user_assign;
         $task->name = $request->name;
         $task->description = $request->description;
         $task->deadline = $request->deadline;
-        $task->user_assign = $request->user_assign;
         $task->image = url("/assets/images/projects/$project->id/tasks/" . $imageName);
         $success = $task->save();
 

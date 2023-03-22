@@ -1,4 +1,4 @@
 import "./bootstrap";
 import "laravel-datatables-vite";
 
-import "./admin";
+import "./pages";

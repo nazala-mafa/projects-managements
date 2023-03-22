@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\ProjectsController;
-use App\Http\Controllers\Admin\TasksController;
-use App\Http\Controllers\Admin\UsersController;
-use App\Models\Project;
+use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\TasksController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +20,10 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
 
-// Admin
-Route::resource('users', UsersController::class)->names('users');
-Route::resource('projects', ProjectsController::class)->names('projects')->only(['index', 'store', 'update', 'destroy']);
-Route::resource('projects.tasks', TasksController::class)->names('tasks')->only(['index', 'store', 'update', 'destroy']);
+Route::resource('users', UsersController::class)->names('users')->only(['index', 'store'])->middleware('role:admin');
+
+Route::resource('projects', ProjectsController::class)->names('projects')->only(['index'])->middleware('role:admin,user');
+Route::resource('projects', ProjectsController::class)->names('projects')->only(['store', 'update', 'destroy'])->middleware('role:admin');
+
+Route::resource('projects.tasks', TasksController::class)->names('tasks')->only(['index', 'update'])->middleware('role:admin,user');
+Route::resource('projects.tasks', TasksController::class)->names('tasks')->only(['store', 'destroy'])->middleware('role:admin');

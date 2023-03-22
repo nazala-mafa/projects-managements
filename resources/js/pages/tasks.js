@@ -1,8 +1,13 @@
+const role = document.querySelector('meta[name="role"]').content;
+
 $(document).ready(function () {
-  const table = $("#example").DataTable({
+  const projectId = window.location.pathname.split("/")[2];
+
+  // Datatables
+  const table = $("#tasks-table").DataTable({
     processing: true,
     serverSide: true,
-    ajax: "/projects",
+    ajax: window.location.pathname,
     buttons: ["copy", "csv", "excel", "reload"],
     columns: [
       {
@@ -11,8 +16,10 @@ $(document).ready(function () {
           return meta.row + meta.settings._iDisplayStart + 1;
         },
       },
+      { data: "user_assign_name" },
       { data: "name" },
-      { data: "status" },
+      { data: "description" },
+      { data: "deadline" },
       {
         data: "image",
         render: function (data, _, row) {
@@ -23,11 +30,15 @@ $(document).ready(function () {
         data: "id",
         render: function (_, __, row) {
           const rowData = JSON.stringify(row);
+          const adminBtn =
+            role === "admin"
+              ? `<button data-row='${rowData}' class="btn btn-sm btn-danger btn-delete">delete</button>`
+              : "";
+
           return `
             <div class="d-flex justify-content-center gap-2">
-              <a href="/projects/${row.id}/tasks" class="btn btn-sm btn-info">tasks</a>
               <button data-row='${rowData}' class="btn btn-sm btn-primary btn-edit">edit</button>
-              <button data-row='${rowData}' class="btn btn-sm btn-danger btn-delete">delete</button>
+              ${adminBtn}
             </div>
           `;
         },
@@ -45,15 +56,20 @@ $(document).ready(function () {
     keyboard: false,
   });
   let modelTitle = document.querySelector(".modal-title");
+
   let inputId = document.querySelector("input#id");
   let inputName = document.querySelector("input#name");
-  let inputStatus = document.querySelector("select#status");
+  let inputDescription = document.querySelector("textarea#description");
+  let inputDeadline = document.querySelector("input#deadline");
+  let inputUserAssign = document.querySelector("select#user_assign");
   let inputImage = document.querySelector("input#image");
   let labelImage = document.querySelector("input#image").previousElementSibling;
   function clearForm() {
     inputId.value = null;
     inputName.value = null;
-    inputStatus.value = null;
+    inputDescription.value = null;
+    inputDeadline.value = null;
+    inputUserAssign.value = null;
     inputImage.value = null;
   }
 
@@ -63,7 +79,7 @@ $(document).ready(function () {
   // Actions handler
   $(".btn-add").click(function () {
     labelImage.innerHTML = "Image";
-    modelTitle.innerHTML = "Add New Projects";
+    modelTitle.innerHTML = "Add New Task";
     modalType = "create";
     clearForm();
     modal.show();
@@ -72,11 +88,13 @@ $(document).ready(function () {
   $(".btn-submit").click(async function () {
     let formData = new FormData();
     formData.append("name", inputName.value);
-    formData.append("status", inputStatus.value);
+    formData.append("description", inputDescription.value);
+    formData.append("deadline", inputDeadline.value);
+    formData.append("user_assign", inputUserAssign.value);
     inputImage.files[0] && formData.append("image", inputImage.files[0]);
 
     if (modalType === "create") {
-      let res = await fetch("/projects", {
+      let res = await fetch(`/projects/${projectId}/tasks`, {
         method: "post",
         body: formData,
         headers: {
@@ -92,7 +110,7 @@ $(document).ready(function () {
     } else if (modalType === "edit") {
       formData.append("_method", "put");
 
-      let res = await fetch("/projects/" + inputId.value, {
+      let res = await fetch(`/projects/${projectId}/tasks/${inputId.value}`, {
         method: "post",
         body: formData,
         headers: {
@@ -117,22 +135,24 @@ $(document).ready(function () {
     labelImage.innerHTML = "Image (fill to change image)";
     const rowData = $(this).data("row");
 
-    modelTitle.innerHTML = `${rowData.name} Projects Edit`;
+    modelTitle.innerHTML = `${rowData.name} Task Edit`;
     modalType = "edit";
     inputId.value = rowData.id;
     inputName.value = rowData.name;
-    inputStatus.value = rowData.status;
+    inputDescription.value = rowData.description;
+    inputDeadline.value = rowData.deadline;
+    inputUserAssign.value = rowData.user_assign;
 
     modal.show();
   }
 
   async function deleteAttempt() {
     const rowData = $(this).data("row");
-    if (!confirm(`Are yout sure to delete ${rowData.name} project?`)) {
+    if (!confirm(`Are yout sure to delete ${rowData.name} task?`)) {
       return;
     }
 
-    let res = await fetch("/projects/" + rowData.id, {
+    let res = await fetch(`/projects/${projectId}/tasks/${rowData.id}`, {
       method: "delete",
       headers: {
         "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')

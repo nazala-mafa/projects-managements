@@ -16,9 +16,11 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between">
         <h4 class="mb-0">Manage Projects</h4>
-        <div>
-          <button class="btn btn-primary btn-add">Add New Project</button>
-        </div>
+        @if (auth()->user()?->role === 'admin')
+          <div>
+            <button class="btn btn-primary btn-add">Add New Project</button>
+          </div>
+        @endif
       </div>
       <div class="card-body">
         <table id="example" class="display" style="width:100%">

@@ -16,11 +16,11 @@
             <a class="nav-link @if (request()->segment(1) == 'users') active @endif"
               href="{{ route('users.index') }}">{{ __('Users') }}</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link @if (request()->segment(1) == 'projects') active @endif"
-              href="{{ route('projects.index') }}">{{ __('Projects') }}</a>
-          </li>
         @endif
+        <li class="nav-item">
+          <a class="nav-link @if (request()->segment(1) == 'projects') active @endif"
+            href="{{ route('projects.index') }}">{{ __('Projects') }}</a>
+        </li>
       </ul>
 
       <!-- Right Side Of Navbar -->
