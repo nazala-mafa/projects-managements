@@ -19,7 +19,7 @@ class ProjectFactory extends Factory
         return [
             'name' => fake()->sentence(),
             'status' => 'inactive',
-            'image' => '/assets/images/default-image.jpg'
+            'image' => url('/assets/images/default-image.jpg')
         ];
     }
 }

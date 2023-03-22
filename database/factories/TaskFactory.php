@@ -21,7 +21,7 @@ class TaskFactory extends Factory
             'name' => fake()->sentence(),
             'description' => fake()->sentence(12),
             'deadline' => fake()->date('Y-m-d', now()->addDays(30)),
-            'image' => '/assets/images/default-image.jpg',
+            'image' => url('/assets/images/default-image.jpg'),
         ];
     }
 }

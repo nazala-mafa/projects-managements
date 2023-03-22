@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class UpdateProjectRequest extends BaseRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreUsersRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -11,7 +13,7 @@ class UpdateProjectRequest extends BaseRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->user()?->role === 'admin';
     }
 
     /**
@@ -22,9 +24,9 @@ class UpdateProjectRequest extends BaseRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'status' => 'required|in:active,inactive',
-            'image' => 'image|max:2048'
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required'
         ];
     }
 }

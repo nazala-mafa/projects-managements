@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\Admin\ProjectsController;
+use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,12 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
 
-Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+// Admin
+Route::resource('users', UsersController::class)->names('users');
+Route::resource('projects', ProjectsController::class)->names('projects')->only(['index', 'store', 'update', 'destroy']);
