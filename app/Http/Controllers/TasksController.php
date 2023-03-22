@@ -32,7 +32,7 @@ class TasksController extends Controller
                 ->toJson();
         }
 
-        return view('admin.tasks.index', [
+        return view('tasks.index', [
             'users' => User::where('role', 'user')->select(['id', 'name'])->get()
         ]);
     }

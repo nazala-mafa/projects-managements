@@ -20,7 +20,7 @@ class ProjectsController extends Controller
         if (request()->ajax()) {
             return DataTables::of(Project::select('*'))->toJson();
         }
-        return view('admin.projects.index');
+        return view('projects.index');
     }
 
     /**

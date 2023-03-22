@@ -5,7 +5,7 @@ $(document).ready(function () {
     processing: true,
     serverSide: true,
     ajax: "/projects",
-    buttons: ["copy", "csv", "excel", "reload"],
+    buttons: ["reload"],
     columns: [
       {
         data: "id",

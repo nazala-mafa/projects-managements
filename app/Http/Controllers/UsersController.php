@@ -13,7 +13,7 @@ class UsersController extends Controller
         if (request()->ajax()) {
             return DataTables::of(User::select('*'))->toJson();
         }
-        return view('admin.users.index');
+        return view('users.index');
     }
 
 
